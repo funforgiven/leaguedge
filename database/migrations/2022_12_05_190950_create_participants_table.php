@@ -14,10 +14,23 @@ return new class extends Migration
     public function up()
     {
         Schema::create('participants', function (Blueprint $table) {
-            $table->id();
+            $table->integer('participantId');
             $table->string('puuid');
             $table->string('gameId');
             $table->string('championId');
+            $table->integer('kills');
+            $table->integer('deaths');
+            $table->integer('assists');
+            $table->integer('cs');
+            $table->integer('visionScore');
+            $table->integer('item0');
+            $table->integer('item1');
+            $table->integer('item2');
+            $table->integer('item3');
+            $table->integer('item4');
+            $table->integer('item5');
+            $table->integer('item6');
+            $table->boolean('win');
             $table->timestamps();
         });
     }

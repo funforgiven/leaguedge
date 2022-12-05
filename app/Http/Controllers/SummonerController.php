@@ -25,7 +25,7 @@ class SummonerController extends Controller
     {
         try {
             $this->lapi = new LeagueAPI([
-                BaseAPI::SET_KEY => 'RGAPI-927a95ec-e43d-4494-8044-da421021850a',
+                BaseAPI::SET_KEY => env('RGAPI'),
                 BaseAPI::SET_REGION => 'tr',
             ]);
         } catch (SettingsException|GeneralException $e) {
@@ -133,7 +133,21 @@ class SummonerController extends Controller
                     'gameId' => "{$matchDto->info->platformId}_{$matchDto->info->gameId}",
                 ],
                 [
+                    'participantId' => $participantDto->participantId,
                     'championId' => $participantDto->championId,
+                    'kills' => $participantDto->kills,
+                    'deaths' => $participantDto->deaths,
+                    'assists' => $participantDto->assists,
+                    'cs' => $participantDto->totalMinionsKilled,
+                    'visionScore' => $participantDto->visionScore,
+                    'item0' => $participantDto->item0,
+                    'item1' => $participantDto->item1,
+                    'item2' => $participantDto->item2,
+                    'item3' => $participantDto->item3,
+                    'item4' => $participantDto->item4,
+                    'item5' => $participantDto->item5,
+                    'item6' => $participantDto->item6,
+                    'win' => $participantDto->win,
                 ]);
             }
         }
