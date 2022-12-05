@@ -23,5 +23,10 @@ class Summoner extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['puuid'];
+    protected $guarded = [];
+
+    public function games()
+    {
+        return $this->belongsToMany(Game::class, 'participants', 'puuid', 'gameId');
+    }
 }

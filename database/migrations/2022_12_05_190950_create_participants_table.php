@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('games', function (Blueprint $table) {
+        Schema::create('participants', function (Blueprint $table) {
+            $table->id();
+            $table->string('puuid');
             $table->string('gameId');
-            $table->string('gameMode');
-            $table->string('gameType');
-            $table->integer('mapId');
-            $table->timestamp('gameCreation');
-            $table->timestamp('gameStart');
-            $table->timestamp('gameEnd');
+            $table->string('championId');
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('games');
+        Schema::dropIfExists('participants');
     }
 };
