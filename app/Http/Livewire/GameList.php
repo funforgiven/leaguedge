@@ -9,7 +9,6 @@ use App\Models\Summoner;
 use Carbon\Carbon;
 use Livewire\Component;
 use RiotAPI\LeagueAPI\LeagueAPI;
-use function Sodium\add;
 
 class GameList extends Component
 {
@@ -56,7 +55,13 @@ class GameList extends Component
 
         $games = $games->merge($existingGames);
 
-        return $games;
+        $extra = $this->perPage * $this->pageCount - 100;
+        if($extra > 0)
+        {
+            $games->merge(collect(Game::whereNotIn('gameId', $gameIds)->orderByDesc('gameStart')->take($extra)->get()));
+        }
+
+        return $games->sortByDesc('gameStart');
     }
 
     public function createGame($gameId)
