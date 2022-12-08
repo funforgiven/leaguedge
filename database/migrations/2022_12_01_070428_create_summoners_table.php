@@ -21,7 +21,6 @@ return new class extends Migration
             $table->timestamp('revisionDate');
             $table->string('name');
             $table->integer('summonerLevel');
-            $table->string('region');
             $table->timestamps();
         });
     }
