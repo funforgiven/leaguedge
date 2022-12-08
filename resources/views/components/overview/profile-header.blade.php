@@ -1,5 +1,5 @@
 <div class="flex gap-4">
-    <img class="w-24 h-24" src="https://cdn.communitydragon.org/latest/profile-icon/{{ $summoner->profileIconId }}" alt="Profile Icon">
+    <img class="w-24 h-24" src="https://cdn.communitydragon.org/latest/profile-icon/{{ $summoner->profileIconId }}">
 
     <div class="flex flex-col justify-center">
         <div class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

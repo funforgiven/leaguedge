@@ -13,8 +13,6 @@ use RiotAPI\Base\Exceptions\ServerException;
 use RiotAPI\Base\Exceptions\ServerLimitException;
 use RiotAPI\Base\Exceptions\SettingsException;
 use RiotAPI\LeagueAPI\LeagueAPI;
-use RiotAPI\LeagueAPI\Objects\MatchDto;
-use RiotAPI\LeagueAPI\Objects\SummonerDto;
 
 class SummonerController extends Controller
 {
@@ -38,10 +36,10 @@ class SummonerController extends Controller
         $this->setRegion($region);
 
         // Get summoner
-        $summoner = $this->getSummoner($summonerName);
+        $summoner = $this->createOrUpdateSummonerByName($summonerName);
 
         // Create Games
-        $games = $this->createGames($summoner, 5);
+        $games = $this->createOrGetGames($summoner, 5);
 
         return view('overview', [
             'summoner' => $summoner,
@@ -59,17 +57,15 @@ class SummonerController extends Controller
         }
     }
 
-    public function getSummoner(string $summonerName)
+    public function createOrUpdateSummonerByName($summonerName)
     {
         try {
-            return $this->createOrUpdateSummoner($this->lapi->getSummonerByName($summonerName));
-        } catch (RequestException|GeneralException|SettingsException|ServerLimitException|ServerException $e) {
+            $summonerDto = $this->lapi->getSummonerByName($summonerName);
+        }
+        catch (RequestException|ServerLimitException|SettingsException|GeneralException $e) {
             dd($e);
         }
-    }
 
-    public function createOrUpdateSummoner(SummonerDto $summonerDto)
-    {
         return Summoner::query()->updateOrCreate([
             'puuid' => $summonerDto->puuid,
         ], [
@@ -83,7 +79,7 @@ class SummonerController extends Controller
         ]);
     }
 
-    public function createGames($summoner, int $count = 100)
+    public function createOrGetGames($summoner, int $count = 100)
     {
         try {
             $matchIds = $this->lapi->getMatchIdsByPUUID($summoner->puuid, count: $count);
@@ -115,43 +111,81 @@ class SummonerController extends Controller
             }
 
             $game = new Game([
-                'gameId' => "$matchId",
+                'gameId' => $matchId,
                 'gameMode' => $matchDto->info->gameMode,
                 'gameType' => $matchDto->info->gameType,
                 'mapId' => $matchDto->info->mapId,
+                'gameDuration' => $matchDto->info->gameDuration,
                 'gameCreation' => Carbon::createFromTimestampMsUTC($matchDto->info->gameCreation)->toDate(),
                 'gameStart' => Carbon::createFromTimestampMsUTC($matchDto->info->gameStartTimestamp)->toDate(),
-                'gameEnd' => Carbon::createFromTimestampMsUTC($matchDto->info->gameStartTimestamp + $matchDto->info->gameDuration * 1000)->toDate(),
             ]);
-
             $game->save();
 
-            foreach($matchDto->info->participants as $participantDto)
-            {
-                Participant::query()->firstOrCreate([
-                    'puuid' => $participantDto->puuid,
-                    'gameId' => "{$matchDto->info->platformId}_{$matchDto->info->gameId}",
-                ],
-                [
-                    'participantId' => $participantDto->participantId,
-                    'championId' => $participantDto->championId,
-                    'kills' => $participantDto->kills,
-                    'deaths' => $participantDto->deaths,
-                    'assists' => $participantDto->assists,
-                    'cs' => $participantDto->totalMinionsKilled,
-                    'visionScore' => $participantDto->visionScore,
-                    'item0' => $participantDto->item0,
-                    'item1' => $participantDto->item1,
-                    'item2' => $participantDto->item2,
-                    'item3' => $participantDto->item3,
-                    'item4' => $participantDto->item4,
-                    'item5' => $participantDto->item5,
-                    'item6' => $participantDto->item6,
-                    'win' => $participantDto->win,
-                ]);
-            }
+            $this->addParticipants($matchDto, $matchId);
         }
 
         return $game;
+    }
+
+    public function addParticipants($matchDto, $matchId)
+    {
+        foreach($matchDto->info->participants as $participantDto)
+        {
+            $summoner = Summoner::query()->where([
+                'puuid' => $participantDto->puuid,
+            ])->first();
+
+            if($summoner == null)
+            {
+                $this->createSummoner($participantDto);
+            }
+
+            $this->createParticipant($participantDto, $matchId);
+        }
+    }
+
+    public function createSummoner($participantDto)
+    {
+        try {
+            $summonerDto = $this->lapi->getSummonerByPUUID($participantDto->puuid);
+        } catch (RequestException|ServerException|ServerLimitException|SettingsException|GeneralException $e) {
+            dd($e);
+        }
+
+        $summoner = new Summoner([
+            'puuid' => $summonerDto->puuid,
+            'accountId' => $summonerDto->accountId,
+            'summonerId' => $summonerDto->id,
+            'profileIconId' => $summonerDto->profileIconId,
+            'revisionDate' => Carbon::createFromTimestampMsUTC($summonerDto->revisionDate)->toDate(),
+            'name'=> $summonerDto->name,
+            'summonerLevel' => $summonerDto->summonerLevel,
+            'region' => $this->region,
+        ]);
+        $summoner->save();
+    }
+
+    public function createParticipant($participantDto, $matchId)
+    {
+        $participant = new Participant([
+            'puuid' => $participantDto->puuid,
+            'gameId' => $matchId,
+            'participantId' => $participantDto->participantId,
+            'championId' => $participantDto->championId,
+            'kills' => $participantDto->kills,
+            'deaths' => $participantDto->deaths,
+            'assists' => $participantDto->assists,
+            'cs' => $participantDto->totalMinionsKilled,
+            'visionScore' => $participantDto->visionScore,
+            'item0' => $participantDto->item0,
+            'item1' => $participantDto->item1,
+            'item2' => $participantDto->item2,
+            'item3' => $participantDto->item3,
+            'item4' => $participantDto->item4,
+            'item5' => $participantDto->item5,
+            'item6' => $participantDto->item6,
+            'win' => $participantDto->win,
+        ]);
+        $participant->save();
     }
 }

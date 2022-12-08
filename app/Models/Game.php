@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,11 +16,8 @@ class Game extends Model
 
     protected $guarded = [];
 
-    public function summoners()
+    public function participants()
     {
-        return $this->belongsToMany(Summoner::class, 'participants', 'gameId', 'puuid')
-            ->withPivot(
-                'championId',
-            );
+        return $this->hasMany(Participant::class, 'gameId', 'gameId');
     }
 }

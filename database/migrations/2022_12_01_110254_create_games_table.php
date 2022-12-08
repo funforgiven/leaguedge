@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('gameMode');
             $table->string('gameType');
             $table->integer('mapId');
+            $table->integer('gameDuration');
             $table->timestamp('gameCreation');
             $table->timestamp('gameStart');
-            $table->timestamp('gameEnd');
             $table->timestamps();
         });
     }

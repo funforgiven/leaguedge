@@ -14,4 +14,9 @@ class Participant extends Model
     protected $keyType = 'int';
 
     protected $guarded = [];
+
+    public function summoner()
+    {
+        return $this->belongsTo(Summoner::class, 'puuid', 'puuid');
+    }
 }
