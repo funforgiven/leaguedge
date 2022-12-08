@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> test </title>
     @vite('resources/css/app.css')
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @livewireStyles
 </head>
 
-<body class="dark:bg-gray-900">
+<body class="bg-gray-200 dark:bg-gray-900">
 
     <x-navbar.navbar></x-navbar.navbar>
-    {{ $content }}
+    <div class="my-6">
+        {{ $content }}
+    </div>
 
     <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js"></script>
+    @livewireScripts
 </body>
 
 <script>

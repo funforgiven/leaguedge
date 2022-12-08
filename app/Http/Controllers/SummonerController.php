@@ -7,6 +7,7 @@ use App\Models\Participant;
 use App\Models\Summoner;
 use Carbon\Carbon;
 use RiotAPI\Base\BaseAPI;
+use RiotAPI\Base\Exceptions\ForbiddenException;
 use RiotAPI\Base\Exceptions\GeneralException;
 use RiotAPI\Base\Exceptions\RequestException;
 use RiotAPI\Base\Exceptions\ServerException;
@@ -27,7 +28,7 @@ class SummonerController extends Controller
                 BaseAPI::SET_REGION => 'tr',
             ]);
         } catch (SettingsException|GeneralException $e) {
-            dd($e);
+            return abort(404);
         }
     }
 
@@ -52,8 +53,11 @@ class SummonerController extends Controller
         try {
             $this->region = $region;
             $this->lapi->setRegion($region);
-        } catch (SettingsException|GeneralException $e) {
+        } catch (SettingsException $e) {
             dd($e);
+        }
+        catch(GeneralException $e){
+            return abort(404);
         }
     }
 
@@ -62,8 +66,12 @@ class SummonerController extends Controller
         try {
             $summonerDto = $this->lapi->getSummonerByName($summonerName);
         }
-        catch (RequestException|ServerLimitException|SettingsException|GeneralException $e) {
+        catch (SettingsException|ServerLimitException|ForbiddenException $e) {
             dd($e);
+        }
+        catch (GeneralException $e)
+        {
+            return abort(404);
         }
 
         return Summoner::query()->updateOrCreate([

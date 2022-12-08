@@ -1,4 +1,4 @@
-<div class="flex flex-row items-center bg-white border rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+<div class="flex flex-row items-center bg-gray-100 border rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
     <div class="flex flex-col items-center w-20 h-20 m-3 ml-5">
         <img src="https://cdn.communitydragon.org/latest/champion/{{ $currentParticipant->championId }}/square">
     </div>
