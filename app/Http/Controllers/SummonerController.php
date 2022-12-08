@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Summoner;
 use Carbon\Carbon;
-use RiotAPI\Base\Exceptions\ForbiddenException;
 use RiotAPI\Base\Exceptions\GeneralException;
-use RiotAPI\Base\Exceptions\ServerLimitException;
-use RiotAPI\Base\Exceptions\SettingsException;
 use RiotAPI\LeagueAPI\LeagueAPI;
 
 class SummonerController extends Controller

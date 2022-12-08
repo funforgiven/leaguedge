@@ -8,12 +8,8 @@ use App\Models\Participant;
 use App\Models\Summoner;
 use Carbon\Carbon;
 use Livewire\Component;
-use RiotAPI\Base\Exceptions\GeneralException;
-use RiotAPI\Base\Exceptions\RequestException;
-use RiotAPI\Base\Exceptions\ServerException;
-use RiotAPI\Base\Exceptions\ServerLimitException;
-use RiotAPI\Base\Exceptions\SettingsException;
 use RiotAPI\LeagueAPI\LeagueAPI;
+use function Sodium\add;
 
 class GameList extends Component
 {
@@ -25,7 +21,7 @@ class GameList extends Component
 
     public function mount()
     {
-        $this->gameIds = app(LeagueAPI::class)->getMatchIdsByPUUID($this->summoner->puuid, count: 100);
+        $this->gameIds = collect(app(LeagueAPI::class)->getMatchIdsByPUUID($this->summoner->puuid, count: 100));
     }
     public function render()
     {
@@ -46,53 +42,57 @@ class GameList extends Component
         $games = collect();
 
         $length = $this->perPage * $this->pageCount;
-        foreach(array_slice($this->gameIds, 0, $length) as $gameId)
+        $gameIds = $this->gameIds->slice(0, $length);
+
+        $existingGames = collect(Game::whereIn('gameId', $gameIds)->get());
+
+        foreach($gameIds as $gameId)
         {
-            $games->add($this->createOrGetGame($gameId));
+            if($existingGames->where('gameId', $gameId)->isEmpty())
+            {
+                $games->add($this->createGame($gameId));
+            }
         }
+
+        $games = $games->merge($existingGames);
 
         return $games;
     }
 
-    public function createOrGetGame($gameId)
+    public function createGame($gameId)
     {
-        $game = Game::query()->where([
+        $matchDto = app(LeagueAPI::class)->getMatch($gameId);
+
+        $game = new Game([
             'gameId' => $gameId,
-        ])->first();
+            'gameMode' => $matchDto->info->gameMode,
+            'gameType' => $matchDto->info->gameType,
+            'mapId' => $matchDto->info->mapId,
+            'gameDuration' => $matchDto->info->gameDuration,
+            'gameCreation' => Carbon::createFromTimestampMsUTC($matchDto->info->gameCreation)->toDate(),
+            'gameStart' => Carbon::createFromTimestampMsUTC($matchDto->info->gameStartTimestamp)->toDate(),
+        ]);
+        $game->save();
 
-        if ($game == null) {
-            try {
-                $matchDto = app(LeagueAPI::class)->getMatch($gameId);
-            } catch (RequestException|ServerException|ServerLimitException|SettingsException|GeneralException $e) {
-                dd($e);
-            }
-
-            $game = new Game([
-                'gameId' => $gameId,
-                'gameMode' => $matchDto->info->gameMode,
-                'gameType' => $matchDto->info->gameType,
-                'mapId' => $matchDto->info->mapId,
-                'gameDuration' => $matchDto->info->gameDuration,
-                'gameCreation' => Carbon::createFromTimestampMsUTC($matchDto->info->gameCreation)->toDate(),
-                'gameStart' => Carbon::createFromTimestampMsUTC($matchDto->info->gameStartTimestamp)->toDate(),
-            ]);
-            $game->save();
-
-            $this->addParticipants($matchDto, $gameId);
-        }
+        $this->addParticipants($matchDto, $gameId);
 
         return $game;
     }
 
     public function addParticipants($matchDto, $gameId)
     {
+        $summonerIds = collect();
+
         foreach($matchDto->info->participants as $participantDto)
         {
-            $summoner = Summoner::query()->where([
-                'puuid' => $participantDto->puuid,
-            ])->first();
+            $summonerIds->add($participantDto->puuid);
+        }
 
-            if($summoner == null)
+        $existingSummoners = collect(Summoner::whereIn('puuid', $summonerIds)->get());
+
+        foreach($matchDto->info->participants as $participantDto)
+        {
+            if($existingSummoners->where('puuid', $participantDto->puuid)->isEmpty())
             {
                 $this->createSummoner($participantDto);
             }
@@ -103,11 +103,7 @@ class GameList extends Component
 
     public function createSummoner($participantDto)
     {
-        try {
-            $summonerDto = app(LeagueAPI::class)->getSummonerByPUUID($participantDto->puuid);
-        } catch (RequestException|ServerException|ServerLimitException|SettingsException|GeneralException $e) {
-            dd($e);
-        }
+        $summonerDto = app(LeagueAPI::class)->getSummonerByPUUID($participantDto->puuid);
 
         $summoner = new Summoner([
             'puuid' => $summonerDto->puuid,

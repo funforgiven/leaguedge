@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(LeagueAPI::class, function() {
             return new LeagueAPI([
-                BaseAPI::SET_KEY => env('RGAPI'),
+                BaseAPI::SET_KEY => config('auth.rgapi'),
                 BaseAPI::SET_REGION => 'tr',
             ]);
         });

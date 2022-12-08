@@ -18,6 +18,6 @@ class Game extends Model
 
     public function participants()
     {
-        return $this->hasMany(Participant::class, 'gameId', 'gameId');
+        return $this->hasMany(Participant::class, 'gameId', 'gameId')->with('summoner');
     }
 }
