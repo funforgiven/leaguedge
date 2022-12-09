@@ -3,4 +3,10 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: {},
   },
+
+    purge: {
+        options: {
+            safelist: [/data-theme$/],
+        },
+    },
 }

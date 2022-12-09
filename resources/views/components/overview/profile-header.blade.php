@@ -1,13 +1,14 @@
-<div class="flex gap-4">
-    <img class="w-24 h-24" src="https://cdn.communitydragon.org/latest/profile-icon/{{ $summoner->profileIconId }}">
-
-    <div class="flex flex-col justify-center">
-        <div class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ $summoner->name }}
+<div class="card gap-4 items-center">
+    <div class="indicator gap-2">
+        <span class="indicator-item indicator-bottom indicator-center badge border border-accent">{{ $summoner->summonerLevel }}</span>
+        <div class="avatar">
+            <div class="w-24 rounded-full ring ring-accent ring-offset-base-100 ring-offset-2">
+                <img class="w-24 h-24" src="https://cdn.communitydragon.org/latest/profile-icon/{{ $summoner->profileIconId }}">
+            </div>
         </div>
-        <div class="text-gray-900 dark:text-white">
-            Level {{ $summoner->summonerLevel }}
-        </div>
+    </div>
+    <div class="card-title">
+        {{ $summoner->name }}
     </div>
 </div>
 

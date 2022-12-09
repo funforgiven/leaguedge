@@ -9,7 +9,7 @@
     <livewire:styles></livewire:styles>
 </head>
 
-<body class="bg-gray-200 dark:bg-gray-900">
+<body>
 
     <x-navbar.navbar></x-navbar.navbar>
     <div class="my-6">
@@ -18,12 +18,3 @@
 
     <livewire:scripts></livewire:scripts>
 </body>
-
-<script>
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark')
-    }
-</script>

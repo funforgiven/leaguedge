@@ -4,7 +4,7 @@
         <x-overview.game :$game :$currentParticipant></x-overview.game>
     @endforeach
 
-    <button wire:click="showMore">Show more</button>
+    <button wire:click="showMore" class="btn btn-outline bg-base-300 border-accent">Show more</button>
 
     <!-- Infinite Scroll
     <div x-data="{
