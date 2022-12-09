@@ -13,7 +13,9 @@ use RiotAPI\LeagueAPI\LeagueAPI;
 class GameList extends Component
 {
     public $summoner;
+
     public $gameIds;
+    public $games;
 
     public $perPage = 5;
     public $pageCount = 1;
@@ -21,19 +23,19 @@ class GameList extends Component
     public function mount()
     {
         $this->gameIds = collect(app(LeagueAPI::class)->getMatchIdsByPUUID($this->summoner->puuid, count: 100));
+        $this->games = $this->createOrGetGames();
     }
     public function render()
     {
-        $games = $this->createOrGetGames();
-
         return view('livewire.game-list', [
-            'games' => $games,
+            'games' => $this->games,
         ]);
     }
 
-    public function loadMore()
+    public function showMore()
     {
         $this->pageCount += 1;
+        $this->games = $this->createOrGetGames();
     }
 
     public function createOrGetGames()
@@ -45,6 +47,12 @@ class GameList extends Component
 
         $existingGames = collect(Game::whereIn('gameId', $gameIds)->get());
 
+        $extra = $this->perPage * $this->pageCount - 100;
+        if($extra > 0)
+        {
+            $games = $games->merge(collect(Game::whereNotIn('gameId', $gameIds)->orderByDesc('gameStart')->take($extra)->get()));
+        }
+
         foreach($gameIds as $gameId)
         {
             if($existingGames->where('gameId', $gameId)->isEmpty())
@@ -53,15 +61,7 @@ class GameList extends Component
             }
         }
 
-        $games = $games->merge($existingGames);
-
-        $extra = $this->perPage * $this->pageCount - 100;
-        if($extra > 0)
-        {
-            $games->merge(collect(Game::whereNotIn('gameId', $gameIds)->orderByDesc('gameStart')->take($extra)->get()));
-        }
-
-        return $games->sortByDesc('gameStart');
+        return $games->merge($existingGames)->sortByDesc('gameStart')->values()->all();
     }
 
     public function createGame($gameId)

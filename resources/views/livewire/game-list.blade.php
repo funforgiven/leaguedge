@@ -4,6 +4,9 @@
         <x-overview.game :$game :$currentParticipant></x-overview.game>
     @endforeach
 
+    <button wire:click="showMore">Show more</button>
+
+    <!-- Infinite Scroll
     <div x-data="{
         observe () {
             let observer = new IntersectionObserver((entries) => {
@@ -20,5 +23,6 @@
     }" x-init="observe">
 
     </div>
+    -->
 
 </div>

@@ -6,7 +6,7 @@
     <title> test </title>
     @vite('resources/css/app.css')
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @livewireStyles
+    <livewire:styles></livewire:styles>
 </head>
 
 <body class="bg-gray-200 dark:bg-gray-900">
@@ -16,8 +16,7 @@
         {{ $content }}
     </div>
 
-    <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js"></script>
-    @livewireScripts
+    <livewire:scripts></livewire:scripts>
 </body>
 
 <script>

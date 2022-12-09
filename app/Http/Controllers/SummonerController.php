@@ -30,7 +30,7 @@ class SummonerController extends Controller
             app(LeagueAPI::class)->setRegion($region);
         }
         catch(GeneralException $e){
-            return abort(404);
+            abort(404);
         }
     }
 
@@ -41,7 +41,7 @@ class SummonerController extends Controller
         }
         catch (GeneralException $e)
         {
-            return abort(404);
+            abort(404);
         }
 
         return Summoner::query()->updateOrCreate([
