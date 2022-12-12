@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Participant extends Model
 {
-    use HasFactory;
-
     protected $primaryKey = 'participantId';
     public $incrementing = false;
     protected $keyType = 'int';

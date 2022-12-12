@@ -108,6 +108,6 @@ return [
 
     'password_timeout' => 10800,
 
-    'rgapi' => "RGAPI-cb065720-8bc3-4d9b-a114-0b5a62fe43dd",
+    'rgapi' => "RGAPI-a143d468-a807-4b40-a6ee-9481b8cc30fe",
 
 ];

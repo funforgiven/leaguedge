@@ -8,12 +8,12 @@ use App\Models\Participant;
 use App\Models\Summoner;
 use Carbon\Carbon;
 use Livewire\Component;
+use RiotAPI\Base\BaseAPI;
 use RiotAPI\LeagueAPI\LeagueAPI;
 
 class GameList extends Component
 {
     public $summoner;
-
     public $gameIds;
     public $games;
 
@@ -118,6 +118,7 @@ class GameList extends Component
             'revisionDate' => Carbon::createFromTimestampMsUTC($summonerDto->revisionDate)->toDate(),
             'name'=> $summonerDto->name,
             'summonerLevel' => $summonerDto->summonerLevel,
+            'region' => app(LeagueAPI::class)->getSetting(BaseAPI::SET_REGION),
         ]);
         $summoner->save();
     }

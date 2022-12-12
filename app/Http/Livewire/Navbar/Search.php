@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Navbar;
 
+use App\Models\Summoner;
 use Livewire\Component;
 
 class Search extends Component
@@ -11,7 +12,9 @@ class Search extends Component
 
     public function render()
     {
-        return view('livewire.navbar.search');
+        return view('livewire.navbar.search', [
+            'results' => Summoner::search($this->name)->take(5)->get(),
+        ]);
     }
 
     public function search()

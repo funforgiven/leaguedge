@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Summoner;
 use Carbon\Carbon;
+use RiotAPI\Base\BaseAPI;
 use RiotAPI\Base\Exceptions\GeneralException;
 use RiotAPI\LeagueAPI\LeagueAPI;
 
 class SummonerController extends Controller
 {
-    protected string $region;
-
     public function overview($region, $summonerName)
     {
         $this->setRegion($region);
@@ -26,7 +25,6 @@ class SummonerController extends Controller
     public function setRegion(string $region)
     {
         try {
-            $this->region = $region;
             app(LeagueAPI::class)->setRegion($region);
         }
         catch(GeneralException $e){
@@ -51,8 +49,9 @@ class SummonerController extends Controller
             'summonerId' => $summonerDto->id,
             'profileIconId' => $summonerDto->profileIconId,
             'revisionDate' => Carbon::createFromTimestampMsUTC($summonerDto->revisionDate)->toDate(),
-            'name'=> $summonerDto->name,
+            'name' => $summonerDto->name,
             'summonerLevel' => $summonerDto->summonerLevel,
+            'region' => app(LeagueAPI::class)->getSetting(BaseAPI::SET_REGION),
         ]);
     }
 }

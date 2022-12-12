@@ -15,7 +15,33 @@
                 <li><button x-on:click="$wire.set('region', 'lan')">LAN</button></li>
                 <li><button x-on:click="$wire.set('region', 'las')">LAS</button></li>
             </ul>
-            <input wire:model="name" wire:keydown.enter="search" type="text" placeholder="Search summoner..." class="input input-ghost" />
+            <div class="dropdown dropdown-bottom">
+                <label tabindex="0" class="">
+                    <input wire:model="name" wire:keydown.enter="search" type="text" placeholder="Search summoner..." class="input" />
+                </label>
+                <ul x-show="$wire.name != '' " tabindex="0" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-64 p-2 my-1 gap-1">
+                    @if($results->isEmpty())
+                        <li>
+                            <div class="flex">
+                                <img class="w-8 h-8" src="https://cdn.communitydragon.org/latest/profile-icon/1">
+                                <a href="/lol/tr/{{$name}}">{{$name}}</a>
+                            </div>
+                        </li>
+                    @else
+                        @foreach($results as $result)
+                            <li>
+                                <a class="flex" href="/lol/tr/{{$result->name}}">
+                                    <img class="w-8 h-8" src="https://cdn.communitydragon.org/latest/profile-icon/{{ $result->profileIconId }}">
+                                    <div class="flex gap-1">
+                                        <div class="truncate"> {{$result->name}} </div>
+                                        ({{strtoupper($result->region)}})
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
+                    @endif
+                </ul>
+            </div>
             <button wire:click="search" class="btn btn-square">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </button>
