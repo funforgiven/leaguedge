@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/lol/{region}/{summonerName}', [SummonerController::class, 'overview']);
+Route::get('/lol/summoner/{region}/{name}', [SummonerController::class, 'overview']);

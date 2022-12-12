@@ -12,17 +12,15 @@ class SummonerController extends Controller
 {
     public function overview($region, $summonerName)
     {
-        $this->setRegion($region);
-
-        // Get summoner
-        $summoner = $this->createOrUpdateSummonerByName($summonerName);
+        $summoner = SummonerController::getSummonerByName($summonerName, $region);
+        GameController::createGames($summoner, 10);
 
         return view('overview', [
             'summoner' => $summoner,
         ]);
     }
 
-    public function setRegion(string $region)
+    public static function getSummonerByName($summonerName, $region)
     {
         try {
             app(LeagueAPI::class)->setRegion($region);
@@ -30,10 +28,7 @@ class SummonerController extends Controller
         catch(GeneralException $e){
             abort(404);
         }
-    }
 
-    public function createOrUpdateSummonerByName($summonerName)
-    {
         try {
             $summonerDto = app(LeagueAPI::class)->getSummonerByName($summonerName);
         }
@@ -53,5 +48,24 @@ class SummonerController extends Controller
             'summonerLevel' => $summonerDto->summonerLevel,
             'region' => app(LeagueAPI::class)->getSetting(BaseAPI::SET_REGION),
         ]);
+    }
+
+    public static function createSummoner($puuid)
+    {
+        $summonerDto = app(LeagueAPI::class)->getSummonerByPUUID($puuid);
+
+        $summoner = new Summoner([
+            'puuid' => $summonerDto->puuid,
+            'accountId' => $summonerDto->accountId,
+            'summonerId' => $summonerDto->id,
+            'profileIconId' => $summonerDto->profileIconId,
+            'revisionDate' => Carbon::createFromTimestampMsUTC($summonerDto->revisionDate)->toDate(),
+            'name'=> $summonerDto->name,
+            'summonerLevel' => $summonerDto->summonerLevel,
+            'region' => app(LeagueAPI::class)->getSetting(BaseAPI::SET_REGION),
+        ]);
+        $summoner->save();
+
+        return $summoner;
     }
 }

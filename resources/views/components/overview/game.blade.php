@@ -23,7 +23,7 @@
         @foreach($game->participants as $index=>$participant)
             <div class="flex {{$index < 5 ? 'flex-row-reverse text-right' : 'flex-row text-left'}}">
                 <img class="w-8 h-8 mx-1" src="https://cdn.communitydragon.org/latest/champion/{{ $participant->championId }}/square">
-                <a href="/lol/tr/{{ $participant->summoner->name }}" class="w-24 truncate text-lg tracking-tight hover:underline{{$participant->summoner->puuid == $currentParticipant->puuid ? ' font-bold' : ''}}">{{ $participant->summoner->name }}</a>
+                <a href="/lol/summoner/{{ $participant->summoner->region }}/{{ $participant->summoner->name }}" class="w-24 truncate text-lg tracking-tight hover:underline{{$participant->summoner->puuid == $currentParticipant->puuid ? ' font-bold' : ''}}">{{ $participant->summoner->name }}</a>
             </div>
         @endforeach
     </div>

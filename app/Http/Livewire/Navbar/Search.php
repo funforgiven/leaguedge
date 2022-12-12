@@ -19,6 +19,6 @@ class Search extends Component
 
     public function search()
     {
-        $this->redirect("/lol/{$this->region}/{$this->name}");
+        $this->redirect("/lol/summoner/{$this->region}/{$this->name}");
     }
 }
