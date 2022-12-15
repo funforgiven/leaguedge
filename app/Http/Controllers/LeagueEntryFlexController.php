@@ -8,6 +8,8 @@ class LeagueEntryFlexController extends Controller
 {
     public static function createOrUpdateLeagueEntry($leagueEntryDto)
     {
+        if(!$leagueEntryDto) return;
+
         LeagueEntryFlex::updateOrCreate([
             'summonerId' => $leagueEntryDto->summonerId,
         ], [
