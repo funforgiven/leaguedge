@@ -22,7 +22,7 @@ class ParticipantController extends Controller
         {
             if($existingSummoners->where('puuid', $participantDto->puuid)->isEmpty())
             {
-                SummonerController::createSummoner($participantDto->puuid);
+                SummonerController::createSummonerByPUUID($participantDto->puuid);
             }
 
             ParticipantController::createParticipant($participantDto, $gameId);

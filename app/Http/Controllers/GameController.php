@@ -8,7 +8,7 @@ use RiotAPI\LeagueAPI\LeagueAPI;
 
 class GameController extends Controller
 {
-    public static function createGames($summoner, $count)
+    public static function createLastGames($summoner, $count)
     {
         $gameIds = collect(app(LeagueAPI::class)->getMatchIdsByPUUID($summoner->puuid, count: $count));
 
@@ -32,7 +32,7 @@ class GameController extends Controller
         $addedCount = 0;
         foreach($gameIds as $gameId)
         {
-            if($addedCount == $count)
+            if($addedCount >= $count)
             {
                 break;
             }

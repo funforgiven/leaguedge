@@ -23,6 +23,16 @@ class Summoner extends Model
         return $this->belongsToMany(Game::class, 'participants', 'puuid', 'gameId');
     }
 
+    public function leagueEntrySolo()
+    {
+        return $this->hasOne(LeagueEntrySolo::class, 'summonerId', 'summonerId');
+    }
+
+    public function leagueEntryFlex()
+    {
+        return $this->hasOne(LeagueEntryFlex::class, 'summonerId', 'summonerId');
+    }
+
     /**
      * Get the indexable data array for the model.
      *

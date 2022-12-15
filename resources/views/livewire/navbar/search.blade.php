@@ -22,13 +22,13 @@
                 <ul x-show="$wire.name != '' " tabindex="0" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-64 p-2 my-1 gap-1">
                     @if($results->isEmpty())
                         <li>
-                            <div class="flex" href="/lol/summoner/{{ $region }}/{{ $name }}">
+                            <a class="flex" href="/lol/summoner/{{ $region }}/{{ $name }}">
                                 <img class="w-8 h-8" src="https://cdn.communitydragon.org/latest/profile-icon/1">
                                 <div class="flex gap-1">
-                                    <div class="truncate"> {{$name}} </div>
+                                    {{$name}}
                                     ({{strtoupper($region)}})
                                 </div>
-                            </div>
+                            </a>
                         </li>
                     @else
                         @foreach($results as $result)
@@ -36,7 +36,7 @@
                                 <a class="flex" href="/lol/summoner/{{ $result->region }}/{{ $result->name }}">
                                     <img class="w-8 h-8" src="https://cdn.communitydragon.org/latest/profile-icon/{{ $result->profileIconId }}">
                                     <div class="flex gap-1">
-                                        <div class="truncate"> {{$result->name}} </div>
+                                        {{$result->name}}
                                         ({{strtoupper($result->region)}})
                                     </div>
                                 </a>
