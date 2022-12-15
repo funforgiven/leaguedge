@@ -46,7 +46,7 @@ class SummonerController extends Controller
         }
         else
         {
-            if($summoner->updated_at->diffInSeconds(Carbon::now()) > 30)
+            if($summoner->updated_at->diffInSeconds(Carbon::now()) > 60)
             {
                 $summoner = SummonerController::updateSummoner($summoner);
                 $updated = true;
@@ -56,6 +56,10 @@ class SummonerController extends Controller
         if($updated)
         {
             GameController::createLastGames($summoner, 10);
+
+            $leagueEntries = collect(app(LeagueAPI::class)->getLeagueEntriesForSummoner($summoner->summonerId));
+            LeagueEntryFlexController::createOrUpdateLeagueEntry($leagueEntries->where('queueType', 'RANKED_FLEX_SR')->first());
+            LeagueEntrySoloController::createOrUpdateLeagueEntry($leagueEntries->where('queueType', 'RANKED_SOLO_5x5')->first());
         }
 
         return $summoner;

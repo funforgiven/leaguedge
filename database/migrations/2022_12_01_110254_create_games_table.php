@@ -21,7 +21,6 @@ return new class extends Migration
             $table->integer('gameDuration');
             $table->timestamp('gameCreation');
             $table->timestamp('gameStart');
-            $table->timestamps();
         });
     }
 

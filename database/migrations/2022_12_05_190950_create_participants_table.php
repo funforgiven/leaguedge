@@ -31,7 +31,6 @@ return new class extends Migration
             $table->integer('item5');
             $table->integer('item6');
             $table->boolean('win');
-            $table->timestamps();
         });
     }
 

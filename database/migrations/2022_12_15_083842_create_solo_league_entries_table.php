@@ -14,14 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('solo_league_entries', function (Blueprint $table) {
-            $table->string('leagueId');
             $table->string('summonerId');
+            $table->string('leagueId');
             $table->string('tier');
             $table->string('rank');
             $table->integer('lp');
             $table->integer('wins');
-            $table->integer('loses');
-            $table->timestamps();
+            $table->integer('losses');
         });
     }
 

@@ -10,6 +10,7 @@ class Participant extends Model
     protected $primaryKey = 'participantId';
     public $incrementing = false;
     protected $keyType = 'int';
+    public $timestamps = false;
 
     protected $guarded = [];
 

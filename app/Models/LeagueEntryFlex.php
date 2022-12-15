@@ -11,7 +11,10 @@ class LeagueEntryFlex extends Model
 
     protected $table = 'flex_league_entries';
 
-    protected $primaryKey = 'leagueId';
+    protected $primaryKey = 'summonerId';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
+
+    protected $guarded = [];
 }

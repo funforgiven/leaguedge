@@ -2,7 +2,7 @@
     <div class="form-control">
         <div class="input-group bg-base-300 border border-accent rounded-lg">
             <button x-on:click="open = true" x-text="$wire.region" class="btn btn-square">TR</button>
-            <ul x-show="open" x-on:click.outside="open = false" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-52 p-2 my-1 gap-1">
+            <ul x-show="open" x-on:click.outside="open = false" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-56 p-2 my-1 gap-1">
                 <li><button x-on:click="$wire.set('region', 'na')">North America</button></li>
                 <li><button x-on:click="$wire.set('region', 'euw')">Europe West</button></li>
                 <li><button x-on:click="$wire.set('region', 'eune')">Europe Nordic & East</button></li>

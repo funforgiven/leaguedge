@@ -9,7 +9,12 @@ class LeagueEntrySolo extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'leagueId';
+    protected $table = 'solo_league_entries';
+
+    protected $primaryKey = 'summonerId';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
+
+    protected $guarded = [];
 }
