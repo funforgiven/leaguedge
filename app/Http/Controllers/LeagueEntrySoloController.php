@@ -12,7 +12,7 @@ class LeagueEntrySoloController extends Controller
     {
         if(!$leagueEntryDto) return;
 
-        LeagueEntrySolo::updateOrCreate([
+        LeagueEntrySolo::query()->updateOrCreate([
             'summonerId' => $leagueEntryDto->summonerId,
         ], [
                 'leagueId' => $leagueEntryDto->leagueId,

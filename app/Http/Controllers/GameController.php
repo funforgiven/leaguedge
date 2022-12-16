@@ -12,7 +12,7 @@ class GameController extends Controller
     {
         $gameIds = collect(app(LeagueAPI::class)->getMatchIdsByPUUID($summoner->puuid, count: $count));
 
-        $existingGames = collect(Game::whereIn('gameId', $gameIds)->get());
+        $existingGames = collect(Game::query()->whereIn('gameId', $gameIds)->get());
 
         foreach($gameIds as $gameId)
         {
@@ -27,7 +27,7 @@ class GameController extends Controller
     {
         $gameIds = collect(app(LeagueAPI::class)->getMatchIdsByPUUID($summoner->puuid, count: 100));
 
-        $existingGames = collect(Game::whereIn('gameId', $gameIds)->get());
+        $existingGames = collect(Game::query()->whereIn('gameId', $gameIds)->get());
 
         $addedCount = 0;
         foreach($gameIds as $gameId)

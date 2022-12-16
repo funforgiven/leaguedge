@@ -16,7 +16,7 @@ class ParticipantController extends Controller
             $summonerIds->add($participantDto->puuid);
         }
 
-        $existingSummoners = collect(Summoner::whereIn('puuid', $summonerIds)->get());
+        $existingSummoners = collect(Summoner::query()->whereIn('puuid', $summonerIds)->get());
 
         foreach($matchDto->info->participants as $participantDto)
         {
