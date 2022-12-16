@@ -1,25 +1,25 @@
-<div x-data="{ open: false }" class="dropdown dropdown-bottom dropdown-start">
-    <div class="form-control">
+<div x-data="{ openRegion: false}" class="dropdown dropdown-bottom dropdown-start">
+    <div x-data="{openSearch: false}" class="form-control">
         <div class="input-group bg-base-300 border border-accent rounded-lg">
-            <button x-on:click="open = true" x-text="$wire.region" class="btn btn-square">TR</button>
-            <ul x-show="open" x-on:click.outside="open = false" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-56 p-2 my-1 gap-1">
-                <li><button x-on:click="$wire.set('region', 'na')">North America</button></li>
-                <li><button x-on:click="$wire.set('region', 'euw')">Europe West</button></li>
-                <li><button x-on:click="$wire.set('region', 'eune')">Europe Nordic & East</button></li>
-                <li><button x-on:click="$wire.set('region', 'kr')">Korea</button></li>
-                <li><button x-on:click="$wire.set('region', 'br')">Brazil</button></li>
-                <li><button x-on:click="$wire.set('region', 'jp')">Japan</button></li>
-                <li><button x-on:click="$wire.set('region', 'ru')">Russia</button></li>
-                <li><button x-on:click="$wire.set('region', 'oce')">Oceania</button></li>
-                <li><button x-on:click="$wire.set('region', 'tr')">Türkiye</button></li>
-                <li><button x-on:click="$wire.set('region', 'lan')">LAN</button></li>
-                <li><button x-on:click="$wire.set('region', 'las')">LAS</button></li>
+            <button x-on:click="openRegion = true" x-text="$wire.region" class="btn btn-square">TR</button>
+            <ul x-show="openRegion" x-on:click.outside="openRegion = false" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-56 p-2 my-1 gap-1">
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'na')">North America</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'euw')">Europe West</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'eune')">Europe Nordic & East</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'kr')">Korea</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'br')">Brazil</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'jp')">Japan</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'ru')">Russia</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'oce')">Oceania</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'tr')">Türkiye</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'lan')">LAN</button></li>
+                <li x-on:click="openRegion = false"><button x-on:click="$wire.set('region', 'las')">LAS</button></li>
             </ul>
             <div class="dropdown dropdown-bottom">
-                <label tabindex="0" class="">
+                <label x-on:click="openSearch = true">
                     <input wire:model="name" wire:keydown.enter="search" type="text" placeholder="Search summoner..." class="input" />
                 </label>
-                <ul x-show="$wire.name != '' " tabindex="0" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-64 p-2 my-1 gap-1">
+                <ul x-show="$wire.name != '' && openSearch" x-on:click.outside="openSearch = false" class="dropdown-content border border-accent menu bg-base-300 rounded-box w-64 p-2 my-1 gap-1">
                     @if($results->isEmpty())
                         <li>
                             <a class="flex" href="/lol/summoner/{{ $region }}/{{ $name }}">
