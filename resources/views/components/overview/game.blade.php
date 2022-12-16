@@ -48,7 +48,7 @@
                         <div class="tracking-tight"><b>{{ number_format(($participant->kills + $participant->assists) / ($participant->deaths == 0 ? 1 : $participant->deaths), 2) }}</b> KDA</div>
                     </div>
                     <div class="w-8 text-xs">{{ $participant->cs }}</div>
-                    <div class="w-8 text-xs">{{ $currentParticipant->visionScore }}</div>
+                    <div class="w-8 text-xs">{{ $participant->visionScore }}</div>
                 </div>
             @endforeach
         </div>
