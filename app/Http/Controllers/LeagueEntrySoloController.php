@@ -15,12 +15,12 @@ class LeagueEntrySoloController extends Controller
         LeagueEntrySolo::query()->updateOrCreate([
             'summonerId' => $leagueEntryDto->summonerId,
         ], [
-                'leagueId' => $leagueEntryDto->leagueId,
-                'tier' => $leagueEntryDto->tier,
-                'rank' => $leagueEntryDto->rank,
-                'lp' => $leagueEntryDto->leaguePoints,
-                'wins' => $leagueEntryDto->wins,
-                'losses' => $leagueEntryDto->losses,
+            'leagueId' => $leagueEntryDto->leagueId,
+            'tier' => $leagueEntryDto->tier,
+            'rank' => $leagueEntryDto->rank,
+            'lp' => $leagueEntryDto->leaguePoints,
+            'wins' => $leagueEntryDto->wins,
+            'losses' => $leagueEntryDto->losses,
         ]);
     }
 }

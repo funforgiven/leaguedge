@@ -25,31 +25,25 @@ class ParticipantController extends Controller
                 SummonerController::createSummonerByPUUID($participantDto->puuid);
             }
 
-            ParticipantController::createParticipant($participantDto, $gameId);
+            Participant::query()->create([
+                'puuid' => $participantDto->puuid,
+                'gameId' => $gameId,
+                'participantId' => $participantDto->participantId,
+                'championId' => $participantDto->championId,
+                'kills' => $participantDto->kills,
+                'deaths' => $participantDto->deaths,
+                'assists' => $participantDto->assists,
+                'cs' => $participantDto->totalMinionsKilled,
+                'visionScore' => $participantDto->visionScore,
+                'item0' => $participantDto->item0,
+                'item1' => $participantDto->item1,
+                'item2' => $participantDto->item2,
+                'item3' => $participantDto->item3,
+                'item4' => $participantDto->item4,
+                'item5' => $participantDto->item5,
+                'item6' => $participantDto->item6,
+                'win' => $participantDto->win,
+            ]);
         }
-    }
-
-    public static function createParticipant($participantDto, $gameId)
-    {
-        $participant = new Participant([
-            'puuid' => $participantDto->puuid,
-            'gameId' => $gameId,
-            'participantId' => $participantDto->participantId,
-            'championId' => $participantDto->championId,
-            'kills' => $participantDto->kills,
-            'deaths' => $participantDto->deaths,
-            'assists' => $participantDto->assists,
-            'cs' => $participantDto->totalMinionsKilled,
-            'visionScore' => $participantDto->visionScore,
-            'item0' => $participantDto->item0,
-            'item1' => $participantDto->item1,
-            'item2' => $participantDto->item2,
-            'item3' => $participantDto->item3,
-            'item4' => $participantDto->item4,
-            'item5' => $participantDto->item5,
-            'item6' => $participantDto->item6,
-            'win' => $participantDto->win,
-        ]);
-        $participant->save();
     }
 }

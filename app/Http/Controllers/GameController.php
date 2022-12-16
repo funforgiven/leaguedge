@@ -49,7 +49,9 @@ class GameController extends Controller
     {
         $matchDto = app(LeagueAPI::class)->getMatch($gameId);
 
-        $game = new Game([
+        ParticipantController::createParticipants($matchDto, $gameId);
+
+        return Game::query()->create([
             'gameId' => $gameId,
             'gameMode' => $matchDto->info->gameMode,
             'gameType' => $matchDto->info->gameType,
@@ -58,10 +60,5 @@ class GameController extends Controller
             'gameCreation' => Carbon::createFromTimestampMsUTC($matchDto->info->gameCreation)->toDate(),
             'gameStart' => Carbon::createFromTimestampMsUTC($matchDto->info->gameStartTimestamp)->toDate(),
         ]);
-        $game->save();
-
-        ParticipantController::createParticipants($matchDto, $gameId);
-
-        return $game;
     }
 }

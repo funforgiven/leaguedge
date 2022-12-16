@@ -92,7 +92,7 @@ class SummonerController extends Controller
 
     public static function createSummoner($summonerDto)
     {
-        $summoner = new Summoner([
+        return Summoner::query()->create([
             'puuid' => $summonerDto->puuid,
             'accountId' => $summonerDto->accountId,
             'summonerId' => $summonerDto->id,
@@ -102,9 +102,6 @@ class SummonerController extends Controller
             'summonerLevel' => $summonerDto->summonerLevel,
             'region' => app(LeagueAPI::class)->getSetting(BaseAPI::SET_REGION),
         ]);
-
-        $summoner->save();
-        return $summoner;
     }
 
     public static function updateSummoner($summoner)
